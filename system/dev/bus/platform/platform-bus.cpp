@@ -32,7 +32,8 @@ zx_status_t PlatformBus::GetBti(uint32_t iommu_index, uint32_t bti_id, zx_handle
     return zx_bti_create(iommu_handle_.get(), 0, bti_id, out_handle);
 }
 
-zx_status_t PlatformBus::SetProtocol(uint32_t proto_id, void* protocol) {
+zx_status_t PlatformBus::SetProtocol(uint32_t proto_id, void* protocol,
+                                     platform_bus_proxy_cb* proxy_cb) {
     if (!protocol) {
         return ZX_ERR_INVALID_ARGS;
     }

@@ -187,7 +187,7 @@ static zx_status_t aml_mailbox_bind(void* ctx, zx_device_t* parent) {
         goto fail;
     }
 
-    pbus_set_protocol(&pbus, ZX_PROTOCOL_MAILBOX, &mailbox->mailbox);
+    pbus_set_protocol(&pbus, ZX_PROTOCOL_MAILBOX, &mailbox->mailbox, NULL);
     return ZX_OK;
 fail:
     aml_mailbox_release(mailbox);

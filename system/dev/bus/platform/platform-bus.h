@@ -46,7 +46,7 @@ public:
     void DdkRelease();
 
     // Platform bus protocol implementation.
-    zx_status_t SetProtocol(uint32_t proto_id, void* protocol);
+    zx_status_t SetProtocol(uint32_t proto_id, void* protocol, platform_bus_proxy_cb* proxy_cb);
     zx_status_t WaitProtocol(uint32_t proto_id);
     zx_status_t DeviceAdd(const pbus_dev_t* dev, uint32_t flags);
     zx_status_t DeviceEnable(uint32_t vid, uint32_t pid, uint32_t did, bool enable);

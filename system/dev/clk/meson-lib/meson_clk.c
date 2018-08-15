@@ -148,7 +148,7 @@ zx_status_t meson_clk_init(const char* name, meson_clk_gate_t* gates,
     meson_clk->clk.ops = &clk_ops;
     meson_clk->clk.ctx = meson_clk;
 
-    st = pbus_set_protocol(&pbus, ZX_PROTOCOL_CLK, &meson_clk->clk);
+    st = pbus_set_protocol(&pbus, ZX_PROTOCOL_CLK, &meson_clk->clk, NULL);
     if (st != ZX_OK) {
         zxlogf(ERROR, "meson_clk_bind: pbus_set_protocol failed, st = %d\n", st);
         goto fail;

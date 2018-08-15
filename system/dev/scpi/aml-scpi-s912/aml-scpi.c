@@ -323,7 +323,7 @@ static zx_status_t aml_scpi_bind(void* ctx, zx_device_t* parent) {
         goto fail;
     }
 
-    pbus_set_protocol(&pbus, ZX_PROTOCOL_SCPI, &scpi->scpi);
+    pbus_set_protocol(&pbus, ZX_PROTOCOL_SCPI, &scpi->scpi, NULL);
     return ZX_OK;
 fail:
     aml_scpi_release(scpi);

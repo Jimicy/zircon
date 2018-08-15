@@ -534,7 +534,7 @@ static zx_status_t aml_gpio_bind(void* ctx, zx_device_t* parent) {
         goto fail;
     }
 
-    pbus_set_protocol(&pbus, ZX_PROTOCOL_GPIO, &gpio->gpio);
+    pbus_set_protocol(&pbus, ZX_PROTOCOL_GPIO, &gpio->gpio, NULL);
 
     return ZX_OK;
 
