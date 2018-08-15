@@ -94,7 +94,7 @@ typedef zx_status_t (*platform_bus_proxy_cb)(const void* req_buf, uint32_t req_s
 
 typedef struct {
     zx_status_t (*set_protocol)(void* ctx, uint32_t proto_id, void* protocol,
-                                platform_bus_proxy_cb* proxy_cb);
+                                platform_bus_proxy_cb proxy_cb);
     zx_status_t (*wait_protocol)(void* ctx, uint32_t proto_id);
     zx_status_t (*device_add)(void* ctx, const pbus_dev_t* dev, uint32_t flags);
     zx_status_t (*device_enable)(void* ctx, uint32_t vid, uint32_t pid, uint32_t did, bool enable);
@@ -109,7 +109,7 @@ typedef struct {
 
 static inline zx_status_t pbus_set_protocol(const platform_bus_protocol_t* pbus,
                                             uint32_t proto_id, void* protocol,
-                                            platform_bus_proxy_cb* proxy_cb) {
+                                            platform_bus_proxy_cb proxy_cb) {
     return pbus->ops->set_protocol(pbus->ctx, proto_id, protocol, proxy_cb);
 }
 

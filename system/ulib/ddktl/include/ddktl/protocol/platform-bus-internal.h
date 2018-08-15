@@ -10,7 +10,7 @@ namespace ddk {
 namespace internal {
 
 DECLARE_HAS_MEMBER_FN_WITH_SIGNATURE(has_pbus_set_protocol, SetProtocol,
-        zx_status_t (C::*)(uint32_t proto_id, void* protocol, platform_bus_proxy_cb* proxy_cb));
+        zx_status_t (C::*)(uint32_t proto_id, void* protocol, platform_bus_proxy_cb proxy_cb));
 DECLARE_HAS_MEMBER_FN_WITH_SIGNATURE(has_pbus_wait_protocol, WaitProtocol,
         zx_status_t (C::*)(uint32_t proto_id));
 DECLARE_HAS_MEMBER_FN_WITH_SIGNATURE(has_pbus_device_add, DeviceAdd,
@@ -24,7 +24,7 @@ template <typename D>
 constexpr void CheckPlatformBusProtocolSubclass() {
     static_assert(internal::has_pbus_set_protocol<D>::value,
                   "PlatformBusProtocol subclasses must implement "
-                  "SetProtocol(uint32_t proto_id, void* protocol, platform_bus_proxy_cb* proxy_cb)");
+                  "SetProtocol(uint32_t proto_id, void* protocol, platform_bus_proxy_cb proxy_cb)");
     static_assert(internal::has_pbus_wait_protocol<D>::value,
                   "PlatformBusProtocol subclasses must implement "
                   "WaitProtocol(uint32_t proto_id)");

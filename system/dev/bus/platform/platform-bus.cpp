@@ -33,7 +33,7 @@ zx_status_t PlatformBus::GetBti(uint32_t iommu_index, uint32_t bti_id, zx_handle
 }
 
 zx_status_t PlatformBus::SetProtocol(uint32_t proto_id, void* protocol,
-                                     platform_bus_proxy_cb* proxy_cb) {
+                                     platform_bus_proxy_cb proxy_cb) {
     if (!protocol) {
         return ZX_ERR_INVALID_ARGS;
     }
@@ -107,8 +107,16 @@ zx_status_t PlatformBus::SetProtocol(uint32_t proto_id, void* protocol,
         break;
     }
     default:
-        // TODO(voydanoff) consider having a registry of arbitrary protocols
-        return ZX_ERR_NOT_SUPPORTED;
+        if (proxy_cb == nullptr) {
+            return ZX_ERR_NOT_SUPPORTED;
+        }
+        fbl::AllocChecker ac;
+        fbl::unique_ptr<ProtoProxy> proxy(new (&ac) ProtoProxy(proto_id, proxy_cb));
+        if (!ac.check()) {
+            return ZX_ERR_NO_MEMORY;
+        }
+        proto_proxys_.insert_or_replace(fbl::move(proxy));
+        break;
     }
 
     fbl::AutoLock lock(&mutex_);
