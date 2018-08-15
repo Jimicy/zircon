@@ -35,10 +35,11 @@ namespace platform_bus {
 
 class ProtoProxy : public fbl::WAVLTreeContainable<fbl::unique_ptr<ProtoProxy>> {
 public:
-    ProtoProxy(uint32_t proto_id, platform_bus_proxy_cb proxy_cb)
-        : proto_id_(proto_id), proxy_cb_(proxy_cb) {}
+    ProtoProxy(uint32_t proto_id, ddk::AnyProtocol* protocol, platform_bus_proxy_cb proxy_cb)
+        : proto_id_(proto_id), protocol_(*protocol), proxy_cb_(proxy_cb) {}
 
     inline uint32_t GetKey() const { return proto_id_; }
+    inline void GetProtocol(void* out) const { memcpy(out, &protocol_, sizeof(protocol_)); }
 
     inline zx_status_t Proxy(const void* req_buf, uint32_t req_size, void* rsp_buf,
                              uint32_t rsp_buf_size, uint32_t* out_rsp_actual) {
@@ -47,6 +48,7 @@ public:
 
 private:
     const uint32_t proto_id_;
+    ddk::AnyProtocol protocol_;
     const platform_bus_proxy_cb proxy_cb_;
 };
 
@@ -136,7 +138,7 @@ private:
     // Dummy IOMMU.
     zx::handle iommu_handle_;
 
-    fbl::WAVLTree<uint32_t, fbl::unique_ptr<ProtoProxy>> proto_proxys_;
+    fbl::WAVLTree<uint32_t, fbl::unique_ptr<ProtoProxy>> proto_proxys_ __TA_GUARDED(mutex_);
 
 };
 
