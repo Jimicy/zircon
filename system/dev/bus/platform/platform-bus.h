@@ -18,6 +18,7 @@
 #include <ddktl/protocol/scpi.h>
 #include <ddktl/protocol/usb-mode-switch.h>
 #include <fbl/array.h>
+#include <fbl/intrusive_wavl_tree.h>
 #include <fbl/mutex.h>
 #include <fbl/unique_ptr.h>
 #include <fbl/vector.h>
@@ -31,6 +32,21 @@
 #include "proxy-protocol.h"
 
 namespace platform_bus {
+
+class ProtoProxy : public fbl::WAVLTreeContainable<fbl::unique_ptr<ProtoProxy>> {
+public:
+    ProtoProxy(uint32_t proto_id, platform_bus_proxy_cb proxy_cb)
+        : proto_id_(proto_id), proxy_cb_(proxy_cb) {}
+
+    inline zx_status_t Proxy(const void* req_buf, uint32_t req_size, void* rsp_buf,
+                             uint32_t rsp_buf_size, uint32_t* out_rsp_actual) {
+        return proxy_cb_(req_buf, req_size, rsp_buf, rsp_buf_size, out_rsp_actual);
+    }
+
+private:
+    const uint32_t proto_id_;
+    const platform_bus_proxy_cb proxy_cb_;
+};
 
 class PlatformBus;
 using PlatformBusType = ddk::Device<PlatformBus, ddk::GetProtocolable>;
@@ -117,6 +133,9 @@ private:
 
     // Dummy IOMMU.
     zx::handle iommu_handle_;
+
+    fbl::WAVLTree<uint32_t, fbl::unique_ptr<ProtoProxy>> proto_proxys_;
+
 };
 
 } // namespace platform_bus

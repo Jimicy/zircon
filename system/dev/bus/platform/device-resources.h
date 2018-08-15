@@ -55,7 +55,7 @@ public:
 
 private:
     // Index of this DeviceResources instance in PlatformDevice::device_index_.
-    uint32_t index_;
+    const uint32_t index_;
 
     // Platform bus resources copied from the pbus_dev_t struct from the board driver.
     fbl::Array<pbus_mmio_t> mmios_;

@@ -39,7 +39,7 @@ private:
 
     DISALLOW_COPY_ASSIGN_AND_MOVE(PlatformProxy);
 
-    zx::channel rpc_channel_;
+    const zx::channel rpc_channel_;
 };
 
 } // namespace platform_bus
