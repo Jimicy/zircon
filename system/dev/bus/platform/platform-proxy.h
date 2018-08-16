@@ -34,11 +34,12 @@ private:
     friend class fbl::RefPtr<PlatformProxy>;
     friend class fbl::internal::MakeRefCountedHelper<PlatformProxy>;
 
-    explicit PlatformProxy(zx_handle_t rpc_channel)
-        : rpc_channel_(rpc_channel) {}
+    explicit PlatformProxy(zx_device_t* parent, zx_handle_t rpc_channel)
+        :  parent_(parent), rpc_channel_(rpc_channel) {}
 
     DISALLOW_COPY_ASSIGN_AND_MOVE(PlatformProxy);
 
+    zx_device_t* parent_;
     const zx::channel rpc_channel_;
 };
 

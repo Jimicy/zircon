@@ -81,7 +81,7 @@ fail:
 zx_status_t PlatformProxy::Create(zx_device_t* parent, zx_handle_t rpc_channel) {
     fbl::AllocChecker ac;
 
-    auto proxy = fbl::MakeRefCountedChecked<PlatformProxy>(&ac, rpc_channel);
+    auto proxy = fbl::MakeRefCountedChecked<PlatformProxy>(&ac, parent, rpc_channel);
     if (!ac.check()) {
         return ZX_ERR_NO_MEMORY;
     }
