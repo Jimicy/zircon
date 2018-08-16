@@ -28,7 +28,9 @@ public:
     void DdkRelease();
 
     // Platform proxy protocol implementation.
-    zx_status_t SetProxy(uint32_t proto_id, platform_proxy_cb proxy_cb);
+     zx_status_t SetProtocol(uint32_t proto_id, void* protocol);
+     zx_status_t Proxy(uint32_t proto_id, const void* req_buf, uint32_t req_size, void* rsp_buf,
+                       uint32_t rsp_buf_size, uint32_t* out_rsp_actual);
 
 private:
     explicit ProxyHost(uint32_t proto_id, zx_device_t* parent, fbl::RefPtr<PlatformProxy> proxy)

@@ -94,6 +94,9 @@ enum {
     PDEV_ADD_PBUS_DEVHOST = (1 << 0),
 };
 
+typedef zx_status_t (*platform_proxy_cb)(const void* req_buf, uint32_t req_size, void* rsp_buf,
+                                             uint32_t rsp_buf_size, uint32_t* out_rsp_actual);
+
 typedef struct {
     zx_status_t (*set_protocol)(void* ctx, uint32_t proto_id, void* protocol,
                                 platform_proxy_cb proxy_cb);

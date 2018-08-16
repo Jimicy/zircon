@@ -9,14 +9,21 @@
 namespace ddk {
 namespace internal {
 
-DECLARE_HAS_MEMBER_FN_WITH_SIGNATURE(has_platform_proxy_set_proxy, SetProxy,
-        zx_status_t (C::*)(uint32_t proto_id, platform_proxy_cb proxy_cb));
+DECLARE_HAS_MEMBER_FN_WITH_SIGNATURE(has_platform_proxy_set_protocol, SetProtocol,
+        zx_status_t (C::*)(uint32_t proto_id, void* protocol));
+DECLARE_HAS_MEMBER_FN_WITH_SIGNATURE(has_platform_proxy_proxy, Proxy,
+        zx_status_t (C::*)(uint32_t proto_id, const void* req_buf, uint32_t req_size, void* rsp_buf,
+                           uint32_t rsp_buf_size, uint32_t* out_rsp_actual));
 
 template <typename D>
 constexpr void CheckPlatformProxyProtocolSubclass() {
-    static_assert(internal::has_platform_proxy_set_proxy<D>::value,
+    static_assert(internal::has_platform_proxy_set_protocol<D>::value,
                   "PlatformProxyProtocol subclasses must implement "
-                  "SetProxy(uint32_t proto_id, platform_proxy_cb proxy_cb)");
+                  "SetProtocol(uint32_t proto_id, void* protocol)");
+    static_assert(internal::has_platform_proxy_proxy<D>::value,
+                  "PlatformProxyProtocol subclasses must implement "
+                  "Proxy(uint32_t proto_id, const void* req_buf, uint32_t req_size, void* rsp_buf, "
+                  "uint32_t rsp_buf_size, uint32_t* out_rsp_actual)");
  }
 
 }  // namespace internal

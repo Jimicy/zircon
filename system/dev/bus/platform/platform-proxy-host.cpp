@@ -50,7 +50,13 @@ void ProxyHost::DdkRelease() {
     delete this;
 }
 
-zx_status_t ProxyHost::SetProxy(uint32_t proto_id, platform_proxy_cb proxy_cb) {
+zx_status_t ProxyHost::SetProtocol(uint32_t proto_id, void* protocol) {
+return -1;
+
+}
+
+zx_status_t ProxyHost::Proxy(uint32_t proto_id, const void* req_buf, uint32_t req_size,
+                             void* rsp_buf, uint32_t rsp_buf_size, uint32_t* out_rsp_actual) {
 return -1;
 }
 
