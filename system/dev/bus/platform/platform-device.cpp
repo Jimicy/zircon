@@ -248,6 +248,14 @@ zx_status_t PlatformDevice::RpcDeviceAdd(const DeviceResources* dr, uint32_t ind
     return ZX_OK;
 }
 
+zx_status_t PlatformDevice::RpcGetProtocols(const DeviceResources* dr, uint32_t* out_protocols,
+                                            uint32_t* out_protocol_count) {
+    auto count = dr->protocol_count();
+    memcpy(out_protocols, dr->protocols(), count * sizeof(*out_protocols));
+    *out_protocol_count = static_cast<uint32_t>(count);
+    return ZX_OK;
+}
+
 zx_status_t PlatformDevice::RpcUmsSetMode(const DeviceResources* dr, usb_mode_t mode) {
     if (bus_->ums() == nullptr) {
         return ZX_ERR_NOT_SUPPORTED;
@@ -507,6 +515,11 @@ zx_status_t PlatformDevice::DdkRxrpc(zx_handle_t channel) {
         case PDEV_DEVICE_ADD:
             status = RpcDeviceAdd(dr, req->index, &resp->device_id);
             break;
+        case PDEV_GET_PROTOCOLS: {
+            auto protos = reinterpret_cast<uint32_t*>(&req[1]);
+            status = RpcGetProtocols(dr, protos, &resp->protocol_count);
+            break;
+        }
         default:
             zxlogf(ERROR, "platform_dev_rxrpc: unknown op %u\n", req_header->op);
             return ZX_ERR_INTERNAL;

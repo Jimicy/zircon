@@ -86,6 +86,8 @@ private:
     zx_status_t RpcGetBti(const DeviceResources* dr, uint32_t index, zx_handle_t* out_handle,
                           uint32_t* out_handle_count);
     zx_status_t RpcDeviceAdd(const DeviceResources* dr, uint32_t index, uint32_t* out_device_id);
+    zx_status_t RpcGetProtocols(const DeviceResources* dr, uint32_t* out_protocols,
+                                uint32_t* out_protocol_count);
     zx_status_t RpcUmsSetMode(const DeviceResources* dr, usb_mode_t mode);
     zx_status_t RpcGpioConfig(const DeviceResources* dr, uint32_t index, uint32_t flags);
     zx_status_t RpcGpioSetAltFunction(const DeviceResources* dr, uint32_t index, uint64_t function);
