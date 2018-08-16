@@ -34,7 +34,7 @@
 //     PlatformProxyDevice(zx_device_t* parent)
 //       : PlatformProxyDeviceType("my-platform-proxy", parent) {}
 //
-//    zx_status_t SetProtocol(uint32_t proto_id, platform_proxy_cb proxy_cb);
+//    zx_status_t SetProxy(uint32_t proto_id, platform_proxy_cb proxy_cb);
 //     ...
 // };
 
@@ -45,7 +45,7 @@ class PlatformProxyProtocol : public internal::base_protocol {
 public:
     PlatformProxyProtocol() {
         internal::CheckPlatformProxyProtocolSubclass<D>();
-        platform_proxy_proto_ops_.set_protocol = SetProtocol;
+        platform_proxy_proto_ops_.set_proxy = SetProxy;
 
        // Can only inherit from one base_protocol implementation.
         ZX_ASSERT(ddk_proto_id_ == 0);
@@ -57,9 +57,8 @@ protected:
     platform_proxy_protocol_ops_t platform_proxy_proto_ops_ = {};
 
 private:
-    static zx_status_t SetProtocol(void* ctx, uint32_t proto_id, void* protocol,
-                                   platform_proxy_cb proxy_cb) {
-        return static_cast<D*>(ctx)->SetProtocol(proto_id, protocol, proxy_cb);
+    static zx_status_t SetProxy(void* ctx, uint32_t proto_id, platform_proxy_cb proxy_cb) {
+        return static_cast<D*>(ctx)->SetProxy(proto_id, proxy_cb);
     }
 };
 
@@ -68,8 +67,8 @@ public:
     PlatformProxyProtocolProxy(platform_proxy_protocol_t* proto)
         : ops_(proto->ops), ctx_(proto->ctx) {}
 
-    zx_status_t SetProtocol(uint32_t proto_id, platform_proxy_cb proxy_cb) {
-        return ops_->set_protocol(ctx_, proto_id, proxy_cb);
+    zx_status_t SetProxy(uint32_t proto_id, platform_proxy_cb proxy_cb) {
+        return ops_->set_proxy(ctx_, proto_id, proxy_cb);
     }
 
 private:
