@@ -516,8 +516,9 @@ zx_status_t PlatformDevice::DdkRxrpc(zx_handle_t channel) {
             status = RpcDeviceAdd(dr, req->index, &resp->device_id);
             break;
         case PDEV_GET_PROTOCOLS: {
-            auto protos = reinterpret_cast<uint32_t*>(&req[1]);
+            auto protos = reinterpret_cast<uint32_t*>(&resp[1]);
             status = RpcGetProtocols(dr, protos, &resp->protocol_count);
+            resp_len += static_cast<uint32_t>(resp->protocol_count * sizeof(*protos));
             break;
         }
         default:

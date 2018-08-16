@@ -93,6 +93,11 @@ zx_status_t PlatformProxy::LoadProtocols() {
         return status;
     }
 
+    uint32_t protocol_count = resp.pdev.protocol_count;
+    for (uint32_t i = 0; i < protocol_count; i++) {
+        printf("PROTOCOL %08x\n", resp.protocols[i]);
+    }
+
     return ZX_OK;
 }
 
