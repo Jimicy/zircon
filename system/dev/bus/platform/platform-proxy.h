@@ -39,6 +39,8 @@ private:
 
     DISALLOW_COPY_ASSIGN_AND_MOVE(PlatformProxy);
 
+    zx_status_t LoadProtocols();
+
     zx_device_t* parent_;
     const zx::channel rpc_channel_;
 };

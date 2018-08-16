@@ -18,7 +18,6 @@ static constexpr size_t PROXY_MAX_TRANSFER_SIZE = 4096;
 // Device ID for a top level platform device (that is, an immediate child of the platform bus).
 static constexpr uint32_t ROOT_DEVICE_ID = 0;
 
-
 // Header for RPC requests.
 typedef struct {
     zx_txid_t txid;
@@ -41,6 +40,7 @@ enum {
     PDEV_GET_DEVICE_INFO,
     PDEV_GET_BOARD_INFO,
     PDEV_DEVICE_ADD,
+    PDEV_GET_PROTOCOLS,
 };
 
 typedef struct {
@@ -58,7 +58,12 @@ typedef struct {
     pdev_device_info_t device_info;
     pdev_board_info_t board_info;
     uint32_t device_id;
+    uint32_t protocol_count;
 } rpc_pdev_rsp_t;
+
+// Maximum number of protocols that can be returned via PDEV_GET_PROTOCOLS.
+static constexpr size_t PROXY_MAX_PROTOCOLS = ((PROXY_MAX_TRANSFER_SIZE - sizeof(rpc_pdev_rsp_t))
+                                                / sizeof(uint32_t));
 
 // Maximum I2C transfer is I2C_MAX_TRANSFER_SIZE minus size of largest header.
 static constexpr size_t I2C_MAX_TRANSFER_SIZE = (PROXY_MAX_TRANSFER_SIZE -

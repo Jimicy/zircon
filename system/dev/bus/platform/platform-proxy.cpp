@@ -78,12 +78,35 @@ fail:
     return status;
 }
 
+zx_status_t PlatformProxy::LoadProtocols() {
+    // Get list of extra protocols to proxy.
+    rpc_pdev_req_t req = {};
+    struct {
+        rpc_pdev_rsp_t pdev;
+        uint32_t protocols[PROXY_MAX_PROTOCOLS];
+    } resp = {};
+    req.header.protocol = ZX_PROTOCOL_PLATFORM_DEV;
+    req.header.op = PDEV_GET_PROTOCOLS;
+
+    auto status = Rpc(ROOT_DEVICE_ID, &req.header, sizeof(req), &resp.pdev.header, sizeof(resp));
+    if (status != ZX_OK) {
+        return status;
+    }
+
+    return ZX_OK;
+}
+
 zx_status_t PlatformProxy::Create(zx_device_t* parent, zx_handle_t rpc_channel) {
     fbl::AllocChecker ac;
 
     auto proxy = fbl::MakeRefCountedChecked<PlatformProxy>(&ac, parent, rpc_channel);
     if (!ac.check()) {
         return ZX_ERR_NO_MEMORY;
+    }
+
+    auto status = proxy->LoadProtocols();
+    if (status != ZX_OK) {
+        return status;
     }
 
     return ProxyDevice::Create(parent, ROOT_DEVICE_ID, proxy, nullptr);

@@ -76,6 +76,10 @@ struct pbus_dev {
     // platform bus resources.
     const pbus_dev_t* children;
     uint32_t child_count;
+    // Extra protocols to be provided to this platform device and its children.
+    // These fields are only used for the top level pbus_dev_t,
+    uint32_t* protocols;
+    uint32_t* protocol_count;
 };
 
 // Subset of pdev_board_info_t to be set by the board driver.
