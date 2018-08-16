@@ -529,6 +529,7 @@ zx_status_t ProxyDevice::Init(device_add_args_t* args) {
     }
 
     if (args) {
+        // This device is a child platform device.
         ctx_ = args->ctx;
         device_ops_ = args->ops;
         proto_id_ = args->proto_id;
@@ -536,7 +537,18 @@ zx_status_t ProxyDevice::Init(device_add_args_t* args) {
 
         return DdkAdd(args->name, args->flags, args->props, args->prop_count);
     } else {
-        return DdkAdd(name_);
+        // This device is the root platform device.
+        // Keep the device invisible until we load all needed protocols.
+        auto status = DdkAdd(name_, DEVICE_ADD_INVISIBLE);
+        if (status != ZX_OK) {
+            return status;
+        }
+       status = proxy_->LoadProtocols(zxdev());
+        if (status != ZX_OK) {
+            return status;
+        } 
+        DdkMakeVisible();
+        return ZX_OK;
     }
 }
 
