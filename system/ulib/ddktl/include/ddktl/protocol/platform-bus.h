@@ -34,7 +34,7 @@
 //     PlatformBusDevice(zx_device_t* parent)
 //       : PlatformBusDeviceType("my-platform-bus", parent) {}
 //
-//    zx_status_t SetProtocol(uint32_t proto_id, void* protocol, platform_bus_proxy_cb proxy_cb);
+//    zx_status_t SetProtocol(uint32_t proto_id, void* protocol, platform_proxy_cb proxy_cb);
 //    zx_status_t WaitProtocol(uint32_t proto_id);
 //    zx_status_t DeviceAdd(const pbus_dev_t* dev, uint32_t flags);
 //    const char* GetBoardName();
@@ -66,7 +66,7 @@ protected:
 
 private:
     static zx_status_t SetProtocol(void* ctx, uint32_t proto_id, void* protocol,
-                                   platform_bus_proxy_cb proxy_cb) {
+                                   platform_proxy_cb proxy_cb) {
         return static_cast<D*>(ctx)->SetProtocol(proto_id, protocol, proxy_cb);
     }
 
@@ -93,7 +93,7 @@ public:
     PlatformBusProtocolProxy(platform_bus_protocol_t* proto)
         : ops_(proto->ops), ctx_(proto->ctx) {}
 
-    zx_status_t SetProtocol(uint32_t proto_id, void* protocol, platform_bus_proxy_cb proxy_cb) {
+    zx_status_t SetProtocol(uint32_t proto_id, void* protocol, platform_proxy_cb proxy_cb) {
         return ops_->set_protocol(ctx_, proto_id, protocol, proxy_cb);
     }
 

@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include "platform-proxy-device.h"
-
 #include <ddktl/device.h>
 #include <ddktl/protocol/canvas.h>
 #include <ddktl/protocol/clk.h>

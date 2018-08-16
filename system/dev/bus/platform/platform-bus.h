@@ -35,7 +35,7 @@ namespace platform_bus {
 
 class ProtoProxy : public fbl::WAVLTreeContainable<fbl::unique_ptr<ProtoProxy>> {
 public:
-    ProtoProxy(uint32_t proto_id, ddk::AnyProtocol* protocol, platform_bus_proxy_cb proxy_cb)
+    ProtoProxy(uint32_t proto_id, ddk::AnyProtocol* protocol, platform_proxy_cb proxy_cb)
         : proto_id_(proto_id), protocol_(*protocol), proxy_cb_(proxy_cb) {}
 
     inline uint32_t GetKey() const { return proto_id_; }
@@ -49,7 +49,7 @@ public:
 private:
     const uint32_t proto_id_;
     ddk::AnyProtocol protocol_;
-    const platform_bus_proxy_cb proxy_cb_;
+    const platform_proxy_cb proxy_cb_;
 };
 
 class PlatformBus;
@@ -66,7 +66,7 @@ public:
     void DdkRelease();
 
     // Platform bus protocol implementation.
-    zx_status_t SetProtocol(uint32_t proto_id, void* protocol, platform_bus_proxy_cb proxy_cb);
+    zx_status_t SetProtocol(uint32_t proto_id, void* protocol, platform_proxy_cb proxy_cb);
     zx_status_t WaitProtocol(uint32_t proto_id);
     zx_status_t DeviceAdd(const pbus_dev_t* dev, uint32_t flags);
     zx_status_t DeviceEnable(uint32_t vid, uint32_t pid, uint32_t did, bool enable);

@@ -41,11 +41,16 @@
 namespace ddk {
 
 template <typename D>
-class PlatformProxyProtocol {
+class PlatformProxyProtocol : public internal::base_protocol {
 public:
     PlatformProxyProtocol() {
         internal::CheckPlatformProxyProtocolSubclass<D>();
         platform_proxy_proto_ops_.set_protocol = SetProtocol;
+
+       // Can only inherit from one base_protocol implementation.
+        ZX_ASSERT(ddk_proto_id_ == 0);
+        ddk_proto_id_ = ZX_PROTOCOL_PLATFORM_PROXY;
+        ddk_proto_ops_ = &platform_proxy_proto_ops_;
     }
 
 protected:
