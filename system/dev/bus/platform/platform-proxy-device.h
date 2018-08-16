@@ -12,6 +12,7 @@
 #include <ddktl/protocol/gpio.h>
 #include <ddktl/protocol/i2c.h>
 #include <ddktl/protocol/platform-device.h>
+#include <ddktl/protocol/platform-proxy.h>
 #include <ddktl/protocol/scpi.h>
 #include <ddktl/protocol/usb-mode-switch.h>
 #include <fbl/ref_ptr.h>
